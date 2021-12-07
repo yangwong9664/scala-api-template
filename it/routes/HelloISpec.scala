@@ -13,7 +13,7 @@ class HelloISpec extends AnyWordSpec with IntegrationSpecBase {
 
   "hello" should {
     "return 200 given a success" in {
-      stubGet("/activity", StatusCodes.OK, """{"activity":"eating"}""")
+//      stubGet("/activity", StatusCodes.OK, """{"activity":"eating"}""")
 
       val res = buildGetClient(s"http://localhost:${port}/hello")
       whenReady(res) { result =>
