@@ -1,0 +1,1 @@
+backend api scala template with Akka HTTP, MongoDB and Cats support

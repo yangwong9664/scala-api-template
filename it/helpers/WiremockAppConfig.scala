@@ -1,0 +1,50 @@
+package helpers
+
+import app.ApplicationConfig
+import com.typesafe.config.{Config, ConfigFactory}
+
+class WiremockAppConfig extends ApplicationConfig {
+  override lazy val config: Config = ConfigFactory.parseString(
+    s"""
+       |app.name = "scala-api-template"
+       |
+       |http {
+       |  host = "0.0.0.0"
+       |  port = 8000
+       |}
+       |
+       |akka {
+       |  loglevel = "INFO"
+       |  loggers = ["akka.event.slf4j.Slf4jLogger"]
+       |
+       |  http {
+       |    server {
+       |      server-header = YANG
+       |    }
+       |    host-connection-pool {
+       |      max-connections = 16
+       |      max-open-requests = 128
+       |    }
+       |  }
+       |}
+       |
+       |akka.http.server.idle-timeout = 300 s
+       |akka.http.client.idle-timeout = 300 s
+       |akka.http.host-connection-pool.idle-timeout = 300 s
+       |akka.http.host-connection-pool.client.idle-timeout = 300 s
+       |akka.http.server.request-timeout= 300 s
+       |akka.http.client.connecting-timeout = 300 s
+       |akka.http.server.bind-timeout = 300 s
+       |
+       |mongodb {
+       |  database = scala-api-template
+       |  servers = ["localhost:27017"]
+       |  user = "admin"
+       |  password = "admin"
+       |  authEnabled = false
+       |}
+       |
+       |""".stripMargin)
+
+  override lazy val httpPort: Int = 2222
+}
