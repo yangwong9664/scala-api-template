@@ -5,12 +5,13 @@ import app.{AppConfig, MainApp}
 import com.github.tomakehurst.wiremock.client.WireMock.setGlobalFixedDelay
 import com.google.inject.{Guice, Injector}
 import database.MongoDB
-import helpers.AkkaTest._
+import app.Akka._
 import module.GuiceModule
 import org.mongodb.scala.bson.BsonDocument
 import org.scalatest._
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent.duration._
@@ -29,6 +30,7 @@ trait IntegrationSpecBase extends AnyWordSpec
   with WiremockHelper
   with HttpHelper {
 
+  implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = Span(100, Seconds), interval = Span(100, Millis))
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val port: Int
@@ -51,7 +53,7 @@ trait IntegrationSpecBase extends AnyWordSpec
   def shutdownSystem: Future[Unit] = Http().shutdownAllConnectionPools() andThen {case _ => system.terminate()}
 
   override def beforeEach(): Unit = {
-    Await.result(mongoDB.metadataCollection.deleteMany(BsonDocument()).toFuture(), 100.seconds)
+    Await.result(mongoDB.metadataCollection.deleteMany(BsonDocument()).toFuture(), 10.seconds)
     super.beforeEach()
   }
 
@@ -67,7 +69,7 @@ trait IntegrationSpecBase extends AnyWordSpec
 
   override def afterAll(): Unit = {
     Await.result(shutdownSystem, 10.seconds)
-    Await.result(mongoDB.metadataCollection.deleteMany(BsonDocument()).toFuture(), 100.seconds)
+    Await.result(mongoDB.metadataCollection.deleteMany(BsonDocument()).toFuture(), 10.seconds)
     stopWiremock()
     super.afterAll()
   }

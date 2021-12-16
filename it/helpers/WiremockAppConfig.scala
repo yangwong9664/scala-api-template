@@ -45,6 +45,4 @@ class WiremockAppConfig extends ApplicationConfig {
        |}
        |
        |""".stripMargin)
-
-  override lazy val httpPort: Int = 2222
 }

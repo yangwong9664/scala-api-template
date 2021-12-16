@@ -27,7 +27,7 @@ val testDependencies = Seq(
 )
 
 val loggingDependencies = Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.7",
+  "ch.qos.logback" % "logback-classic" % "1.2.8",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
   "com.lihaoyi" %% "sourcecode" % "0.2.7"
 )
@@ -68,9 +68,6 @@ lazy val root = (project in file("."))
     Test / parallelExecution := false,
     Test / fork := true,
     IntegrationTest / parallelExecution := false,
-    IntegrationTest / fork := true,
-    Test / coverageEnabled := true,
-    IntegrationTest / coverageEnabled := true,
-    compile / coverageEnabled := true
+    IntegrationTest / fork := true
 )
   .enablePlugins(SbtPlugin)

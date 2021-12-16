@@ -1,13 +1,13 @@
 package helpers
 
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpMethods, HttpRequest, HttpResponse, StatusCode}
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, delete, get, post, stubFor, urlEqualTo, urlMatching, urlPathEqualTo}
+import akka.http.scaladsl.model._
+import app.Akka._
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import AkkaTest._
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 trait HttpHelper {
 
@@ -43,14 +43,14 @@ trait HttpHelper {
         uri = path)
     )
 
-  def buildDeleteClient(path: String): Future[HttpResponse] =
+  def buildDeleteClient(path: String): Future[HttpResponse] = {
     Http().singleRequest(
       HttpRequest(
         HttpMethods.DELETE,
         uri = path
       )
     )
-
+  }
 
   def stubPost(url: String, status: StatusCode, responseBody: String): StubMapping =
     stubFor(post(urlMatching(url))
